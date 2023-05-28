@@ -1,0 +1,23 @@
+# 配置数据库
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/demofromddd
+    username: postgres
+    password: xiaoyi_wyx
+    driver-class-name: org.postgresql.Driver
+  # 配置jpa
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+
+application:
+  security:
+    jwt:
+      secret-key: 58703273357638792F423F4528482B4D6251655468566D597133743677397A24

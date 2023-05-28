@@ -1,4 +1,4 @@
-# demo from ddd
+# library-management-system
 
 这是一个探索使用ddd数据对象传递的项目。  
 在这里会详细描述ddd的分层目录。

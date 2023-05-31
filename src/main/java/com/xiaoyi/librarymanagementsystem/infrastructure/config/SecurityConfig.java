@@ -50,6 +50,7 @@ public class SecurityConfig {
 														"/swagger-ui.html")
 										.permitAll()
 										.requestMatchers("/api/user/admin/**").hasAuthority(Role.ADMIN.name())
+										.requestMatchers("/api/book/admin/**").hasAuthority(Role.ADMIN.name())
 										.anyRequest()
 										.authenticated())
 						.sessionManagement(session -> session

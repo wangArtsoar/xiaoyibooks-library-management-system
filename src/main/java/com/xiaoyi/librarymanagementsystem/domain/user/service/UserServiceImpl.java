@@ -39,7 +39,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean changePassword(String email, ChangePwdDto changePwd) {
 		UserPo userPo = userRepository.findByEmail(email).orElseThrow();
-		if (passwordEncoder.matches(changePwd.oldPassword(), userPo.getPassword())) return false;
+		if (!passwordEncoder.matches(changePwd.oldPassword(), userPo.getPassword()))
+			return false;
 		userPo.setPwd(passwordEncoder.encode(changePwd.newPassword()));
 		userRepository.save(userPo);
 		return true;
@@ -49,7 +50,8 @@ public class UserServiceImpl implements UserService {
 	public String getChangeKey(String email) {
 		UserPo userPo = userRepository.findByEmail(email)
 						.orElseThrow(() -> new UsernameNotFoundException("user not found"));
-		if (Role.ADMIN.name().equals(userPo.getRole().name())) return email + "已经是admin";
+		if (Role.ADMIN.name().equals(userPo.getRole().name()))
+			return email + "已经是admin角色";
 		String s = "welcomebeaadmin" + userPo.getEmail() + userPo.getPwd();
 		return passwordEncoder.encode(s);
 	}

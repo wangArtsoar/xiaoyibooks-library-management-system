@@ -1,6 +1,6 @@
 package com.xiaoyi.librarymanagementsystem.domain.user.entity;
 
-import com.xiaoyi.librarymanagementsystem.domain.user.valueobject.Role;
+import com.xiaoyi.librarymanagementsystem.domain.book.entity.Book;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,20 +8,18 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author 王艺翔
- * @description User
- * @date 2023/5/26 15:14
+ * @description Borrow
+ * @date 2023/5/29 18:39
  * @phone 18318436514
  * @email xiaoyi_wyx@icloud.com
  * @github <a href="https://github.com/Tom-Collection>...</a>
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+@Builder
+public class Borrow {
 	private Integer id;
-	private String name;
-	private String email;
-	private String pwd;
-	private Role role;
+	private User user;
+	private Book book;
 }

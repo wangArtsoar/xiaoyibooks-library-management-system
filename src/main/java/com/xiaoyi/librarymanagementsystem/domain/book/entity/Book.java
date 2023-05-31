@@ -29,5 +29,5 @@ public class Book {
 	private Date createAt;
 	private Date updateAt;
 	private String address;
-	private Integer assortId;
+	private String assortName;
 }

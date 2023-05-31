@@ -3,8 +3,8 @@ package com.xiaoyi.librarymanagementsystem.domain.book.repository.po;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,17 +22,18 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BookPo {
 	@Id
 	@GeneratedValue
 	private Integer id;
 	private String name;
+	private String author;
 	private Date publishDate;
 	private Date createAt;
 	private Date updateAt;
 	private String address;
-	@ManyToOne
-	private AssortPo assort;
+	private String assortName;
 	private Boolean isBorrow;
 	private Boolean isDelete;
 }

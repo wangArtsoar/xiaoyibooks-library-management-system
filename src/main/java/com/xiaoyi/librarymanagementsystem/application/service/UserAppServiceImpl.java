@@ -6,6 +6,9 @@ import com.xiaoyi.librarymanagementsystem.application.dto.EditUserDto;
 import com.xiaoyi.librarymanagementsystem.application.facade.UserAppService;
 import com.xiaoyi.librarymanagementsystem.domain.user.entity.User;
 import com.xiaoyi.librarymanagementsystem.domain.user.service.UserService;
+import com.xiaoyi.librarymanagementsystem.infrastructure.exception.KeyIncorrectException;
+import com.xiaoyi.librarymanagementsystem.infrastructure.exception.PasswordIncorrectException;
+import com.xiaoyi.librarymanagementsystem.infrastructure.exception.RedisNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
@@ -40,11 +43,9 @@ public class UserAppServiceImpl implements UserAppService {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
 		if (!userService.changePassword(email, changePwd)) {
-			return "修改密码失败";
+			throw new PasswordIncorrectException("密码错误");
 		}
-		// 删除token
 		redisTemplate.delete(email);
-		// 删除上下文
 		SecurityContextHolder.clearContext();
 		return "修改密码成功，请重新登录";
 	}
@@ -67,9 +68,11 @@ public class UserAppServiceImpl implements UserAppService {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
 		String redisKey = "upgrade" + email;
-		if (Boolean.FALSE.equals(redisTemplate.hasKey(redisKey))) return "密钥不正确，升级失败";
+		if (Boolean.FALSE.equals(redisTemplate.hasKey(redisKey)))
+			throw new RedisNotFoundException("您不存在升级角色的申请");
 		String redisValue = redisTemplate.opsForValue().get(redisKey);
-		if (!userService.upgradeRole(email, redisValue, key)) return "密钥不正确，升级失败";
+		if (!userService.upgradeRole(email, redisValue, key))
+			throw new KeyIncorrectException("密钥不正确，升级失败");
 		redisTemplate.delete(redisKey);
 		return "升级成功";
 	}

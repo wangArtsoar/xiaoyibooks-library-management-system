@@ -20,4 +20,6 @@ public interface UserService {
 	String getChangeKey(String email);
 
 	boolean upgradeRole(String email, String redisValue, String key);
+
+	User getUserDetail(String email);
 }

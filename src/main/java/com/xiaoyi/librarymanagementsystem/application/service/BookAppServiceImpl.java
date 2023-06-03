@@ -5,6 +5,7 @@ import com.xiaoyi.librarymanagementsystem.application.facade.BookAppService;
 import com.xiaoyi.librarymanagementsystem.domain.book.entity.Book;
 import com.xiaoyi.librarymanagementsystem.domain.book.service.BookService;
 import com.xiaoyi.librarymanagementsystem.domain.user.entity.Borrow;
+import com.xiaoyi.librarymanagementsystem.domain.user.entity.User;
 import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.BookMapper;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -55,7 +56,7 @@ public class BookAppServiceImpl implements BookAppService {
 	@Override
 	public Page<Book> findByAssortName(int page, int size, String assortName) {
 		Pageable pageable = PageRequest.of(page, size);
-		return bookService.findbyAssortName(pageable, assortName);
+		return bookService.findByAssortName(pageable, assortName);
 	}
 
 	@Override
@@ -73,5 +74,10 @@ public class BookAppServiceImpl implements BookAppService {
 	@Override
 	public Page<Book> findAllByTemp(String temp, Pageable pageable) {
 		return bookService.findAllByTemp(temp, pageable);
+	}
+
+	@Override
+	public List<Borrow> findBorrowByUser(User user) {
+		return bookService.getBorrowByUser(user);
 	}
 }

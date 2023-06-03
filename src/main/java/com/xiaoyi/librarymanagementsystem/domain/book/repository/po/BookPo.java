@@ -35,8 +35,8 @@ public class BookPo {
 	private Date updateAt;
 	private String address;
 	private String assortName;
-	@Column(nullable = false)
-	private Boolean isBorrow;
-	@Column(nullable = false)
-	private Boolean isDelete;
+	@Column(columnDefinition = "boolean default false")
+	private boolean isBorrow;
+	@Column(columnDefinition = "boolean default false")
+	private boolean isDelete;
 }

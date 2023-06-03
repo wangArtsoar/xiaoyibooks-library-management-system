@@ -7,20 +7,19 @@ import com.xiaoyi.librarymanagementsystem.domain.book.repository.persistence.Boo
 import com.xiaoyi.librarymanagementsystem.domain.book.repository.po.AssortPo;
 import com.xiaoyi.librarymanagementsystem.domain.book.repository.po.BookPo;
 import com.xiaoyi.librarymanagementsystem.domain.user.entity.Borrow;
+import com.xiaoyi.librarymanagementsystem.domain.user.entity.User;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.persistence.BorrowRepository;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.persistence.UserRepository;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.po.BorrowPo;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.po.UserPo;
-import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.AssortMapper;
-import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.BookMapper;
-import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.BorrowMapper;
-import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.PageMapper;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.*;
 import com.xiaoyi.librarymanagementsystem.infrastructure.exception.CreateFailException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -57,6 +56,7 @@ public class BookServiceImpl implements BookService {
 	private final AssortMapper assortMapper;
 	private final PageMapper pageMapper;
 	private final BorrowMapper borrowMapper;
+	private final UserMapper userMapper;
 
 	@Override
 	public List<Book> addBookList(List<Book> books) {
@@ -101,14 +101,17 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public Page<Book> findbyAssortName(Pageable pageable, String assortName) {
+	public Page<Book> findByAssortName(Pageable pageable, String assortName) {
 		return pageMapper.pageBookPoToPageBook(bookRepository.findByAssortName(pageable, assortName));
 	}
 
 	@Override
 	public Book editBook(Integer id, Book book) {
 		BookPo bookPo = bookRepository.findById(id).orElseThrow();
-		BeanUtils.copyProperties(book, bookPo);
+		bookPo.setName(book.getName());
+		bookPo.setAssortName(book.getAssortName());
+		bookPo.setAuthor(book.getAuthor());
+		bookPo.setPublishDate(book.getPublishDate());
 		return bookMapper.bookPoToBook(bookRepository.save(bookPo));
 	}
 
@@ -126,14 +129,19 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public Page<Book> findAllByTemp(String temp, Pageable pageable) {
-		BookPo bookPo = BookPo
-						.builder()
-						.name(temp)
-						.author(temp)
-						.assortName(temp)
-						.build();
-		Example<BookPo> example = Example.of(bookPo);
-		return pageMapper.pageBookPoToPageBook(bookRepository.findAll(example, pageable));
+		ExampleMatcher matcher = ExampleMatcher.matchingAny()
+						.withMatcher("name", GenericPropertyMatcher::contains)
+						.withMatcher("author", GenericPropertyMatcher::contains)
+						.withMatcher("assortName", GenericPropertyMatcher::contains);
+		BookPo bookPo = BookPo.builder().name(temp).author(temp).assortName(temp).build();
+		Example<BookPo> example = Example.of(bookPo, matcher);
+		Page<BookPo> all = bookRepository.findAll(example, pageable);
+		return pageMapper.pageBookPoToPageBook(all);
+	}
+
+	@Override
+	public List<Borrow> getBorrowByUser(User user) {
+		return borrowMapper.borrowPoToBorrowList(borrowRepository.findAllByUserPo(userMapper.userToUserPo(user)));
 	}
 
 	private Assort updateAssort(String assortName) {

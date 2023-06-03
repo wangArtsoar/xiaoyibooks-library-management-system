@@ -3,6 +3,7 @@ package com.xiaoyi.librarymanagementsystem.application.facade;
 import com.xiaoyi.librarymanagementsystem.application.dto.BookDto;
 import com.xiaoyi.librarymanagementsystem.domain.book.entity.Book;
 import com.xiaoyi.librarymanagementsystem.domain.user.entity.Borrow;
+import com.xiaoyi.librarymanagementsystem.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -31,4 +32,6 @@ public interface BookAppService {
 	Borrow borrowBook(Integer bookId);
 
 	Page<Book> findAllByTemp(String temp, Pageable pageable);
+
+	List<Borrow> findBorrowByUser(User user);
 }

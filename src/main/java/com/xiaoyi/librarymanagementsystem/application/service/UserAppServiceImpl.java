@@ -2,7 +2,9 @@ package com.xiaoyi.librarymanagementsystem.application.service;
 
 import com.xiaoyi.librarymanagementsystem.application.dto.ChangePwdDto;
 import com.xiaoyi.librarymanagementsystem.application.dto.EditUserDto;
+import com.xiaoyi.librarymanagementsystem.application.facade.BookAppService;
 import com.xiaoyi.librarymanagementsystem.application.facade.UserAppService;
+import com.xiaoyi.librarymanagementsystem.domain.user.entity.Borrow;
 import com.xiaoyi.librarymanagementsystem.domain.user.entity.User;
 import com.xiaoyi.librarymanagementsystem.domain.user.service.UserService;
 import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.UserMapper;
@@ -16,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -31,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 public class UserAppServiceImpl implements UserAppService {
 
 	private final UserService userService;
+	private final BookAppService bookAppService;
 	private final RedisTemplate<String, String> redisTemplate;
 	private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
@@ -54,8 +58,12 @@ public class UserAppServiceImpl implements UserAppService {
 
 	@Override
 	public User getUserDetail() {
-		// TODO
-		return null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		User user = userService.getUserDetail(email);
+		List<Borrow> borrowList = bookAppService.findBorrowByUser(user);
+		user.setBorrows(borrowList);
+		return user;
 	}
 
 	@Override

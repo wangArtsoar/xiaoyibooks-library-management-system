@@ -1,5 +1,6 @@
 package com.xiaoyi.librarymanagementsystem.infrastructure.common.util;
 
+import com.xiaoyi.librarymanagementsystem.application.dto.viewmodel.BorrowSimpleVo;
 import com.xiaoyi.librarymanagementsystem.application.dto.viewmodel.BorrowViewModel;
 import com.xiaoyi.librarymanagementsystem.domain.user.entity.Borrow;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.po.BorrowPo;
@@ -17,7 +18,7 @@ import java.util.List;
  * @email xiaoyi_wyx@icloud.com
  * @github <a href="https://github.com/Tom-Collection>...</a>
  */
-@Mapper
+@Mapper(uses = {UserMapper.class, BookMapper.class})
 public interface BorrowMapper {
 	@Mappings({
 					@Mapping(source = "user.name", target = "name"),
@@ -27,7 +28,11 @@ public interface BorrowMapper {
 	})
 	BorrowViewModel borrowToBorrowViewModel(Borrow borrow);
 
+	@Mapping(source = "userPo", target = "user")
+	@Mapping(source = "bookPo", target = "book")
 	Borrow borrowPoToBorrow(BorrowPo borrowPo);
 
 	List<Borrow> borrowPoToBorrowList(List<BorrowPo> borrowPos);
+
+	List<BorrowSimpleVo> borrowViewModelToSimpleList(List<BorrowViewModel> borrows);
 }

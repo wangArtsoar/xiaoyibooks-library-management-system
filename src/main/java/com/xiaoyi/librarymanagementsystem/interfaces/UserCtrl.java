@@ -1,6 +1,5 @@
 package com.xiaoyi.librarymanagementsystem.interfaces;
 
-import com.xiaoyi.librarymanagementsystem.application.assembler.UserAssembler;
 import com.xiaoyi.librarymanagementsystem.application.dto.ChangePwdDto;
 import com.xiaoyi.librarymanagementsystem.application.dto.EditUserDto;
 import com.xiaoyi.librarymanagementsystem.application.dto.LoginDto;
@@ -9,10 +8,12 @@ import com.xiaoyi.librarymanagementsystem.application.dto.viewmodel.UserDetailVi
 import com.xiaoyi.librarymanagementsystem.application.dto.viewmodel.UserViewModel;
 import com.xiaoyi.librarymanagementsystem.application.facade.UserAppService;
 import com.xiaoyi.librarymanagementsystem.infrastructure.auth.AuthenticationService;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,7 @@ public class UserCtrl {
 
 	private final UserAppService userAppService;
 	private final AuthenticationService authenticationService;
+	private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
 	@PostMapping("auth/register")
 	@Tag(name = "auth", description = "认证")
@@ -53,7 +55,7 @@ public class UserCtrl {
 	@Tag(name = "user", description = "用户")
 	@Operation(summary = "修改信息")
 	public ResponseEntity<UserViewModel> editUser(@RequestBody EditUserDto editUserDto) {
-		return ResponseEntity.ok(UserAssembler.toUserViewModel(userAppService.editUser(editUserDto)));
+		return ResponseEntity.ok(userMapper.userToUserViewModel(userAppService.editUser(editUserDto)));
 	}
 
 	@PostMapping("changePassword")
@@ -67,7 +69,7 @@ public class UserCtrl {
 	@Tag(name = "user")
 	@Operation(summary = "用户详情")
 	public ResponseEntity<UserDetailViewModel> getUserDetail() {
-		return ResponseEntity.ok(UserAssembler.toUserDetailViewModel(userAppService.getUserDetail()));
+		return ResponseEntity.ok(userMapper.userToUserDetailViewModel(userAppService.getUserDetail()));
 	}
 
 	@PostMapping("admin/getUpgradeKey")

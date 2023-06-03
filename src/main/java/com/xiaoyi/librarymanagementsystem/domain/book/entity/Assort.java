@@ -22,8 +22,6 @@ import java.util.List;
 public class Assort {
 	private Integer id;
 	private String name;
-	private Integer bookAmount;
 	private List<Book> books;
-	private Integer bookRemain;
 	private String address;
 }

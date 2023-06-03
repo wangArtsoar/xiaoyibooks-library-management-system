@@ -36,6 +36,10 @@ dependencies {
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-loadbalancer', version: '4.0.3'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.0.3'
+    compileOnly "org.springframework:spring-context-indexer"
+    implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
 }
 
 tasks.named('test') {

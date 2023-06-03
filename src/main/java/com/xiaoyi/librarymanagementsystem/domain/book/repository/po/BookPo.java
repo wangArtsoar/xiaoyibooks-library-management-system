@@ -1,5 +1,6 @@
 package com.xiaoyi.librarymanagementsystem.domain.book.repository.po;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -34,6 +35,8 @@ public class BookPo {
 	private Date updateAt;
 	private String address;
 	private String assortName;
+	@Column(nullable = false)
 	private Boolean isBorrow;
+	@Column(nullable = false)
 	private Boolean isDelete;
 }

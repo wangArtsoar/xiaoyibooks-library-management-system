@@ -5,12 +5,12 @@ import com.xiaoyi.librarymanagementsystem.domain.user.entity.User;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.persistence.UserRepository;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.po.UserPo;
 import com.xiaoyi.librarymanagementsystem.domain.user.valueobject.Role;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import static com.xiaoyi.librarymanagementsystem.domain.user.service.UserFactory.toUser;
 
 /**
  * @author 王艺翔
@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
 	@Override
 	public User editUser(String email, User user) {
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
 						.orElseThrow(() -> new UsernameNotFoundException("user not found"));
 		userPo.setName(user.getName());
 		userPo.setEmail(user.getEmail());
-		return toUser(userRepository.save(userPo));
+		return userMapper.userPoToUser(userRepository.save(userPo));
 	}
 
 	@Override

@@ -1,10 +1,11 @@
 package com.xiaoyi.librarymanagementsystem.domain.book.repository.persistence;
 
 import com.xiaoyi.librarymanagementsystem.domain.book.repository.po.BookPo;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
 
 /**
  * @author 王艺翔
@@ -19,10 +20,15 @@ public interface BookRepository extends JpaRepository<BookPo, Integer> {
 	@Query(value = "SELECT pg_catalog.nextval('book_po_seq')", nativeQuery = true)
 	Integer getNextId();
 
-	@Query(""" 
-					SELECT a.id as assortId,assortName as assortName,count(*) as count FROM BookPo b\s
-					inner join AssortPo a on b.assortName = a.name \s
-					group by assortName,a.id
-					""")
-	List<AssortCount> countGroupByAssortName(List<String> assortNameList);
+//	@Query("""
+//					SELECT a.id as assortId,assortName as assortName,count(*) as count FROM BookPo b\s
+//					inner join AssortPo a on b.assortName = a.name \s
+//					group by assortName,a.id
+//					""")
+//	List<AssortCount> countGroupByAssortName(List<String> assortNameList);
+
+	@NotNull Page<BookPo> findAll(@NotNull Pageable pageable);
+
+	Page<BookPo> findByAssortName(Pageable pageable, String assortName);
+
 }

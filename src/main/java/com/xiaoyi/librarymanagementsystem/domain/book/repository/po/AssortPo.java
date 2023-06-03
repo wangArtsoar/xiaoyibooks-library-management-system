@@ -28,6 +28,4 @@ public class AssortPo {
 	private Integer id;
 	@Column(unique = true)
 	private String name;
-	private Integer bookAmount;
-	private String address;
 }

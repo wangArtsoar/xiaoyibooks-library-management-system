@@ -1,15 +1,16 @@
 package com.xiaoyi.librarymanagementsystem.application.service;
 
-import com.xiaoyi.librarymanagementsystem.application.assembler.UserAssembler;
 import com.xiaoyi.librarymanagementsystem.application.dto.ChangePwdDto;
 import com.xiaoyi.librarymanagementsystem.application.dto.EditUserDto;
 import com.xiaoyi.librarymanagementsystem.application.facade.UserAppService;
 import com.xiaoyi.librarymanagementsystem.domain.user.entity.User;
 import com.xiaoyi.librarymanagementsystem.domain.user.service.UserService;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.UserMapper;
 import com.xiaoyi.librarymanagementsystem.infrastructure.exception.KeyIncorrectException;
 import com.xiaoyi.librarymanagementsystem.infrastructure.exception.PasswordIncorrectException;
 import com.xiaoyi.librarymanagementsystem.infrastructure.exception.RedisNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,11 +32,12 @@ public class UserAppServiceImpl implements UserAppService {
 
 	private final UserService userService;
 	private final RedisTemplate<String, String> redisTemplate;
+	private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
 	@Override
 	public User editUser(EditUserDto editUserDto) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		return userService.editUser(authentication.getName(), UserAssembler.toEditUserDto(editUserDto));
+		return userService.editUser(authentication.getName(), userMapper.EditUserDtoToUser(editUserDto));
 	}
 
 	@Override

@@ -12,7 +12,7 @@ import java.util.Date;
  * @email xiaoyi_wyx@icloud.com
  * @github <a href="https://github.com/Tom-Collection>...</a>
  */
-public record BookDto(String name, String author, String assort,
+public record BookDto(String name, String author, String assortName,
                       @DateTimeFormat(
 				                      iso = DateTimeFormat.ISO.DATE
                       ) Date publishDate) {

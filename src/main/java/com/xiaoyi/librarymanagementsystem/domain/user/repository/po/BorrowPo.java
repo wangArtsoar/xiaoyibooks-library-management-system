@@ -3,6 +3,7 @@ package com.xiaoyi.librarymanagementsystem.domain.user.repository.po;
 import com.xiaoyi.librarymanagementsystem.domain.book.repository.po.BookPo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +21,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BorrowPo {
 	@Id
 	@GeneratedValue

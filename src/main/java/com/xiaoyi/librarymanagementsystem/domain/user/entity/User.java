@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * @author 王艺翔
  * @description User
@@ -24,4 +26,5 @@ public class User {
 	private String email;
 	private String pwd;
 	private Role role;
+	private List<Borrow> borrows;
 }

@@ -2,6 +2,9 @@ package com.xiaoyi.librarymanagementsystem.application.facade;
 
 import com.xiaoyi.librarymanagementsystem.application.dto.BookDto;
 import com.xiaoyi.librarymanagementsystem.domain.book.entity.Book;
+import com.xiaoyi.librarymanagementsystem.domain.user.entity.Borrow;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Map;
@@ -18,4 +21,14 @@ public interface BookAppService {
 	List<Book> addBookList(List<BookDto> bookDtos);
 
 	List<Book> addBookMap(Map<String, List<BookDto>> map);
+
+	Page<Book> findAllBooks(int page, int size);
+
+	Page<Book> findByAssortName(int page, int size, String assortName);
+
+	Book editBook(Integer id, BookDto bookDto);
+
+	Borrow borrowBook(Integer bookId);
+
+	Page<Book> findAllByTemp(String temp, Pageable pageable);
 }

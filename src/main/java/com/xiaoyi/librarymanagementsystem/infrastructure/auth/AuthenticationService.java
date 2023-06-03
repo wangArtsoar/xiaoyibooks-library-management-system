@@ -1,14 +1,14 @@
 package com.xiaoyi.librarymanagementsystem.infrastructure.auth;
 
-import com.xiaoyi.librarymanagementsystem.application.assembler.UserAssembler;
 import com.xiaoyi.librarymanagementsystem.application.dto.LoginDto;
 import com.xiaoyi.librarymanagementsystem.application.dto.RegisterDto;
 import com.xiaoyi.librarymanagementsystem.domain.user.entity.User;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.persistence.UserRepository;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.po.UserPo;
-import com.xiaoyi.librarymanagementsystem.domain.user.service.UserFactory;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.UserMapper;
 import com.xiaoyi.librarymanagementsystem.infrastructure.config.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,11 +34,12 @@ public class AuthenticationService {
 	private final JwtUtils jwtUtils;
 	private final RedisTemplate<String, String> redisTemplate;
 	private final PasswordEncoder passwordEncoder;
+	private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
 	public String register(RegisterDto registerDto) {
-		User user = UserAssembler.toRegister(registerDto);
+		User user = userMapper.registerDtoToUser(registerDto);
 		user.setPwd(passwordEncoder.encode(user.getPwd()));
-		UserPo userPo = userRepository.save(UserFactory.toUserPo(user));
+		UserPo userPo = userRepository.save(userMapper.userToUserPo(user));
 		String token = jwtUtils.generateToken(userPo);
 		redisTemplate.opsForValue().append(user.getEmail(), token);
 		return "注册成功";

@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * @author 王艺翔
  * @description Borrow
@@ -22,4 +24,6 @@ public class Borrow {
 	private Integer id;
 	private User user;
 	private Book book;
+	private Date borrowDate;
+	private Date escheatDate;
 }

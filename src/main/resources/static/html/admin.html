@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理页面</title>
+    <link href="../css/admin.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li>
+                <button id="addBtn">添加</button>
+            </li>
+            <li>
+                <button id="upgradeBtn">升级用户</button>
+            </li>
+            <li>
+                <button>查看全部用户</button>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <!-- 在这里添加管理页面的内容 -->
+</main>
+<!-- 添加模态框 -->
+<div class="modal" id="addModal">
+    <div class="modal-content">
+        <h1>添加图书</h1>
+
+        <form enctype="multipart/form-data" id="add-book-form">
+            <label for="book-name">
+                <input id="book-name" placeholder="图书名称" type="text">
+            </label>
+
+            <label for="book-author">
+                <input id="book-author" placeholder="作者" type="text">
+            </label>
+
+            <label for="book-assortName">
+                <input id="book-assortName" placeholder="分类名称" type="text">
+            </label>
+
+            <label for="book-publishDate">
+                <input id="book-publishDate" placeholder="发布日期" type="date">
+            </label>
+
+            <label for="book-file">
+                <input id="book-file" placeholder="上传图书文件" type="file">
+            </label>
+            <input type="submit" value="添加图书">
+        </form>
+        <div id="message"></div>
+    </div>
+</div>
+<!-- 升级模态框 -->
+<div class="modal" id="upgradeModal">
+    <div class="modal-content">
+        <p>在这里添加升级用户的表单</p>
+    </div>
+</div>
+<script src="../js/admin.js"></script>
+<script src="../js/saveBook.js"></script>
+</body>
+</html>

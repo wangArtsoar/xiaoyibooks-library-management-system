@@ -1,10 +1,12 @@
-package com.xiaoyi.librarymanagementsystem.infrastructure.common.util;
+package com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers;
 
 import com.xiaoyi.librarymanagementsystem.application.dto.BookDto;
 import com.xiaoyi.librarymanagementsystem.application.dto.viewmodel.BookViewModel;
 import com.xiaoyi.librarymanagementsystem.domain.book.entity.Book;
 import com.xiaoyi.librarymanagementsystem.domain.book.repository.po.BookPo;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +23,14 @@ import java.util.stream.Collectors;
 @Mapper
 public interface BookMapper {
 
+	@Mapping(target = "filePath", expression = "java(map(bookDto.file()))")
 	Book bookDtoToBook(BookDto bookDto);
+
+	default String map(MultipartFile file) {
+		// 在这里实现您的自定义转换逻辑
+		// 例如，您可以将文件上传到服务器并返回文件的 URL
+		return file.getOriginalFilename();
+	}
 
 	List<Book> bookDtoToBookList(List<BookDto> bookDtos);
 

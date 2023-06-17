@@ -37,6 +37,12 @@ public class SecurityConfig {
 						.csrf(AbstractHttpConfigurer::disable)
 						.authorizeHttpRequests((request) -> request
 										.requestMatchers(
+														"image/**",
+														"favicon.ico",
+														"/css/**",
+														"index.html",
+														"/js/**",
+														"/html/**",
 														"/api/user/auth/**",
 														"/v2/api-docs",
 														"/v3/api-docs",
@@ -61,6 +67,7 @@ public class SecurityConfig {
 										.logoutUrl("/api/user/auth/logout")
 										.addLogoutHandler(logoutService)
 										.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()));
+
 		return http.build();
 	}
 }

@@ -5,9 +5,8 @@ import com.xiaoyi.librarymanagementsystem.domain.user.entity.User;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.persistence.UserRepository;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.po.UserPo;
 import com.xiaoyi.librarymanagementsystem.domain.user.valueobject.Role;
-import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.UserMapper;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.factory.Mappers;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+	private final UserMapper userMapper;
 
 	@Override
 	public User editUser(String email, User user) {

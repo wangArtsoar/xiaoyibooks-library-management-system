@@ -33,7 +33,7 @@ public class JwtAuthConfig extends OncePerRequestFilter {
 
 	private final JwtUtils jwtUtils;
 	private final UserDetailsService userDetailsService;
-	private final RedisTemplate<String, String> redisTemplate;
+	private final RedisTemplate<String, Object> redisTemplate;
 
 	@Override
 	protected void doFilterInternal(

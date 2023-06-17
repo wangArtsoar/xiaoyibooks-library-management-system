@@ -1,5 +1,6 @@
 package com.xiaoyi.librarymanagementsystem.infrastructure.auth;
 
+import com.xiaoyi.librarymanagementsystem.infrastructure.config.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +23,17 @@ import org.springframework.stereotype.Service;
 public class LogoutService implements LogoutHandler {
 
 	private final RedisTemplate<String, String> redisTemplate;
+	private final JwtUtils jwtUtils;
 
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-		if (authentication==null) {
+		final String authHeader = request.getHeader("Authorization");
+		final String jwt;
+		if (authHeader==null || !authHeader.startsWith("Bearer ")) {
 			return;
 		}
-		String email = authentication.getName();
+		jwt = authHeader.substring(7);
+		String email = jwtUtils.extractUsername(jwt);
 		redisTemplate.delete(email);
 		SecurityContextHolder.clearContext();
 	}

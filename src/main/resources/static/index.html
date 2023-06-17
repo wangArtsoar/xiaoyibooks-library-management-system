@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="css/style.css" rel="stylesheet">
+    <title>xiaoyibooks图书管理系统</title>
+</head>
+<body>
+<div class="btn-group">
+    <button class="btn" onclick="showRegister()">注册</button>
+    <button class="btn" onclick="showLogin()">登录</button>
+</div>
+<div id="welcome-message">欢迎来到xiaoyibooks图书管理系统</div>
+<!-- 在这里添加登录模态框 -->
+<div id="loginModal">
+    <!-- 在这里添加关闭按钮 -->
+    <button class="closeBtn" onclick="closeLogin()">X</button>
+    <form id="login-form">
+        <h2>登录</h2>
+        <label for="email">
+            <input id="email" placeholder="请输入用户邮箱" type="email"/>
+        </label>
+        <br>
+        <label for="password">
+            <input id="password" placeholder="请输入密码" type="password">
+        </label>
+        <button type="submit">登录</button>
+    </form>
+    <p id="error" onmousedown="holderError()" style="color:red"></p>
+</div>
+
+<!-- 在这里添加注册模态框 -->
+<div id="registerModel">
+    <!-- 在这里添加关闭按钮 -->
+    <button class="closeBtn" onclick="closeRegister()">X</button>
+    <form id="register-form">
+        <h2>注册</h2>
+        <label for="name">
+            <input id="name" placeholder="请输入用户昵称" type="text">
+        </label>
+        <br>
+        <label for="userEmail">
+            <input id="userEmail" placeholder="请输入用户邮箱" type="email"/>
+        </label>
+        <br>
+        <label for="pwd">
+            <input id="pwd" placeholder="请输入密码" type="password">
+        </label>
+        <br>
+        <button type="submit">注册</button>
+    </form>
+    <p id="errorRegister" onmousedown="holderError()" style="color:red"></p>
+</div>
+
+<script src="js/login.js"></script>
+<script src="js/register.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>

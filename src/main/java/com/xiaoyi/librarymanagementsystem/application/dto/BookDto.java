@@ -1,6 +1,7 @@
 package com.xiaoyi.librarymanagementsystem.application.dto;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -15,5 +16,6 @@ import java.util.Date;
 public record BookDto(String name, String author, String assortName,
                       @DateTimeFormat(
 				                      iso = DateTimeFormat.ISO.DATE
-                      ) Date publishDate) {
+                      ) Date publishDate,
+                      MultipartFile file) {
 }

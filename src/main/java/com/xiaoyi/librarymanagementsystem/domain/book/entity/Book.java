@@ -30,4 +30,5 @@ public class Book {
 	private Date updateAt;
 	private String address;
 	private String assortName;
+	private String filePath;
 }

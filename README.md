@@ -91,3 +91,106 @@ http://localhost:8080/swagger-ui/index,html
 ![img_2.png](img/img_5.png)
 
 ### 集成jpa
+
+postgreSQL的jpa配置
+
+```yaml
+  # 配置jpa
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+```
+
+MySQL的jpa配置  
+需要根据MySQL的版本进行配置，MySQL57或者MySQL80
+
+```yaml
+  # 配置jpa
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL80Dialect
+```
+
+### Jwt
+
+需要添加依赖
+
+```groovy
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+```
+
+编写JwtAuth(Jwt过滤器)和JwtUtils(Jwt的生成与校验)
+
+### MapStruct
+
+添加依赖
+
+```groovy
+    implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
+annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+```
+
+使用方法
+
+```java
+
+@Mapper(uses = {UserMapper.class, BookMapper.class})
+public interface BorrowMapper {
+	@Mappings({
+					@Mapping(source = "user.name", target = "name"),
+					@Mapping(source = "user.email", target = "email"),
+					@Mapping(source = "book.assortName", target = "assortName"),
+					@Mapping(source = "book.name", target = "bookName")
+	})
+	BorrowViewModel borrowToBorrowViewModel(Borrow borrow);
+
+	@Mapping(source = "userPo", target = "user")
+	@Mapping(source = "bookPo", target = "book")
+	Borrow borrowPoToBorrow(BorrowPo borrowPo);
+
+	List<Borrow> borrowPoToBorrowList(List<BorrowPo> borrowPos);
+
+	List<BorrowSimpleVo> borrowViewModelToSimpleList(List<BorrowViewModel> borrows);
+}
+```
+
+## DDD目录
+
+DDD分为四层
+
+1. infrastructure(基础层)
+2. domain(领域层)
+3. interfaces(接口层)
+4. application(应用层)
+
+## 完善配置
+
+## 业务分析
+
+### 登录&注册
+
+### 退出登录
+
+### 初始化角色
+
+### 添加图书
+
+### 图书的借阅以及查询分页
+
+### 模糊查询
+
+## 说明

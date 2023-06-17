@@ -1,6 +1,5 @@
 package com.xiaoyi.librarymanagementsystem.domain.book.service;
 
-import com.xiaoyi.librarymanagementsystem.domain.book.entity.Assort;
 import com.xiaoyi.librarymanagementsystem.domain.book.entity.Book;
 import com.xiaoyi.librarymanagementsystem.domain.book.repository.persistence.AssortRepository;
 import com.xiaoyi.librarymanagementsystem.domain.book.repository.persistence.BookRepository;
@@ -12,7 +11,10 @@ import com.xiaoyi.librarymanagementsystem.domain.user.repository.persistence.Bor
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.persistence.UserRepository;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.po.BorrowPo;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.po.UserPo;
-import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.*;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers.BookMapper;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers.BorrowMapper;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers.PageMapper;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers.UserMapper;
 import com.xiaoyi.librarymanagementsystem.infrastructure.exception.CreateFailException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -27,12 +29,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 /**
  * @author 王艺翔
@@ -48,51 +46,40 @@ public class BookServiceImpl implements BookService {
 
 	private static final Logger logger = LoggerFactory.getLogger(BookService.class);
 	private final BookRepository bookRepository;
-	private final AssortRepository assortRepository;
 	private final BorrowRepository borrowRepository;
 	private final UserRepository userRepository;
-	private final PlatformTransactionManager transactionManager;
 	private final BookMapper bookMapper;
-	private final AssortMapper assortMapper;
 	private final PageMapper pageMapper;
 	private final BorrowMapper borrowMapper;
 	private final UserMapper userMapper;
+	private final AssortRepository assortRepository;
+	private final PlatformTransactionManager transactionManager;
 
 	@Override
-	public List<Book> addBookList(List<Book> books) {
-		Map<String, List<Book>> map = books.stream().collect(Collectors.groupingBy(Book::getAssortName));
-		return addBookMap(map);
-	}
-
-	@Override
-	public List<Book> addBookMap(Map<String, List<Book>> map) {
-		map.forEach((k, v) -> map.put(k, updateAttributes(k, v)));
-		List<Assort> assorts = new ArrayList<>();
-		List<String> assortNameList = map.keySet().stream().toList();
-		assortNameList.forEach(assortName -> assorts.add(updateAssort(assortName)));
-		List<AssortPo> assortPos = assortMapper.assortToAssortPoList(assorts);
-		List<AssortPo> assortAlreadyExist = assortRepository.findByNameIn(
-						assortPos.parallelStream().map(AssortPo::getName).collect(Collectors.toList()));
-		if (assortAlreadyExist.size() > 0) {
-			List<String> alreadyName = assortAlreadyExist.parallelStream().map(AssortPo::getName).toList();
-			assortPos.removeIf(assortPo -> alreadyName.contains(assortPo.getName()));
-		}
+	public Book addBook(Book book) {
 		TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
 		try {
-			if (assortPos.size() > 0) {
-				assortPos = assortRepository.saveAll(assortPos);
-				logger.info("图书类型添加成功: {}", assortPos);
-			}
-			List<BookPo> bookPos = bookMapper.bookToBookPoList(map.values().stream().flatMap(List::stream).toList());
-			List<Book> BooksResponse = bookMapper.bookPoToBookList(bookRepository.saveAll(bookPos));
-			logger.info("图书添加成功: {}", bookPos);
+			assortRepository.save(AssortPo.builder().name(book.getAssortName()).build());
+			Book bookResponse = bookMapper.bookPoToBook(bookRepository.save(updateBookPo(book)));
 			transactionManager.commit(status);
-			return BooksResponse;
+			return bookResponse;
 		} catch (Exception e) {
-			logger.error("Failed to add books", e);
 			transactionManager.rollback(status);
-			throw new CreateFailException("添加失败" + e);
+			throw new CreateFailException("添加图书失败: " + e);
 		}
+	}
+
+	private BookPo updateBookPo(Book book) {
+		BookPo bookPo = bookMapper.bookToBookPo(book);
+		bookPo.setCreateAt(new Date());
+		String address = getBookAddress();
+		bookPo.setAddress(bookPo.getAssortName() + address);
+		return bookPo;
+	}
+
+	private String getBookAddress() {
+		int next = bookRepository.getCountGroupAssortName() + 1;
+		return next < 100 ? String.format("%03d", next + 1):String.valueOf(next + 1);
 	}
 
 	@Override
@@ -142,29 +129,5 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public List<Borrow> getBorrowByUser(User user) {
 		return borrowMapper.borrowPoToBorrowList(borrowRepository.findAllByUserPo(userMapper.userToUserPo(user)));
-	}
-
-	private Assort updateAssort(String assortName) {
-		return Assort.builder()
-						.name(assortName)
-						.address(assortName + "区")
-						.build();
-	}
-
-	private List<Book> updateAttributes(String assortName, List<Book> bookList) {
-		int currId = bookRepository.getNextId() - 1;
-		AtomicInteger idCounter = new AtomicInteger(currId);
-		return bookList.stream().map(book -> updateBook(assortName, idCounter.incrementAndGet(), book)).toList();
-	}
-
-	private Book updateBook(String assortName, Integer nextId, Book book) {
-		return Book.builder()
-						.name(book.getName())
-						.assortName(assortName)
-						.publishDate(book.getPublishDate())
-						.author(book.getAuthor())
-						.address(assortName + String.format("%03d", nextId))
-						.createAt(new Date())
-						.build();
 	}
 }

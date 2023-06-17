@@ -1,4 +1,4 @@
-package com.xiaoyi.librarymanagementsystem.infrastructure.common.util;
+package com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers;
 
 import com.xiaoyi.librarymanagementsystem.domain.book.entity.Assort;
 import com.xiaoyi.librarymanagementsystem.domain.book.repository.po.AssortPo;

@@ -1,6 +1,6 @@
 package com.xiaoyi.librarymanagementsystem.infrastructure.config;
 
-import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.*;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers.*;
 import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

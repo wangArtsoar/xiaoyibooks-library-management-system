@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author 王艺翔
@@ -18,9 +17,7 @@ import java.util.Map;
  * @github <a href="https://github.com/Tom-Collection>...</a>
  */
 public interface BookService {
-	List<Book> addBookList(List<Book> books);
-
-	List<Book> addBookMap(Map<String, List<Book>> map);
+	Book addBook(Book book);
 
 	Page<Book> findAllByPageable(Pageable pageable);
 

@@ -6,7 +6,8 @@ import com.xiaoyi.librarymanagementsystem.domain.book.entity.Book;
 import com.xiaoyi.librarymanagementsystem.domain.book.service.BookService;
 import com.xiaoyi.librarymanagementsystem.domain.user.entity.Borrow;
 import com.xiaoyi.librarymanagementsystem.domain.user.entity.User;
-import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.BookMapper;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.Util;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers.BookMapper;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
@@ -16,9 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author 王艺翔
@@ -36,15 +35,9 @@ public class BookAppServiceImpl implements BookAppService {
 	private final BookMapper bookMapper = Mappers.getMapper(BookMapper.class);
 
 	@Override
-	public List<Book> addBookList(List<BookDto> bookDtos) {
-		return bookService.addBookList(bookMapper.bookDtoToBookList(bookDtos));
-	}
-
-	@Override
-	public List<Book> addBookMap(Map<String, List<BookDto>> map) {
-		Map<String, List<Book>> bookMap = new HashMap<>();
-		map.forEach((k, v) -> bookMap.put(k, bookMapper.bookDtoToBookList(v)));
-		return bookService.addBookMap(bookMap);
+	public Book addBook(BookDto bookDto) {
+		Util.saveFileToServer(bookDto.file());
+		return bookService.addBook(bookMapper.bookDtoToBook(bookDto));
 	}
 
 	@Override

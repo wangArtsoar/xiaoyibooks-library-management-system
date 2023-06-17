@@ -4,9 +4,9 @@ import com.xiaoyi.librarymanagementsystem.application.dto.BookDto;
 import com.xiaoyi.librarymanagementsystem.application.dto.viewmodel.BookViewModel;
 import com.xiaoyi.librarymanagementsystem.application.dto.viewmodel.BorrowViewModel;
 import com.xiaoyi.librarymanagementsystem.application.facade.BookAppService;
-import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.BookMapper;
-import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.BorrowMapper;
-import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.PageMapper;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers.BookMapper;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers.BorrowMapper;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers.PageMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +16,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author 王艺翔
@@ -38,21 +35,12 @@ public class BookCtrl {
 	private final BorrowMapper borrowMapper = Mappers.getMapper(BorrowMapper.class);
 	private final PageMapper pageMapper = Mappers.getMapper(PageMapper.class);
 
-	@PostMapping("admin/bulkAddList")
+	@PostMapping("admin/addBook")
 	@Tag(name = "admin")
-	@Operation(summary = "散装新增图书")
+	@Operation(summary = "新增图书")
 	@PreAuthorize("hasAuthority('admin')")
-	public ResponseEntity<Map<String, List<BookViewModel>>> bulkAddList(@RequestBody List<BookDto> bookDtos) {
-		return ResponseEntity.ok(bookMapper.bookToBookListViewModelMap(bookAppService.addBookList(bookDtos)));
-	}
-
-	@PostMapping("admin/ContainerAddMap")
-	@Tag(name = "admin")
-	@Operation(summary = "集装新增图书")
-	@PreAuthorize("hasAuthority('admin')")
-	public ResponseEntity<Map<String, List<BookViewModel>>> ContainerAddMap(
-					@RequestBody Map<String, List<BookDto>> map) {
-		return ResponseEntity.ok(bookMapper.bookToBookListViewModelMap(bookAppService.addBookMap(map)));
+	public ResponseEntity<BookViewModel> addBook(@ModelAttribute BookDto bookDto) {
+		return ResponseEntity.ok(bookMapper.bookToBookViewModel(bookAppService.addBook(bookDto)));
 	}
 
 	@GetMapping("bookPage")

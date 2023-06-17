@@ -4,11 +4,12 @@ import com.xiaoyi.librarymanagementsystem.application.dto.ChangePwdDto;
 import com.xiaoyi.librarymanagementsystem.application.dto.EditUserDto;
 import com.xiaoyi.librarymanagementsystem.application.dto.LoginDto;
 import com.xiaoyi.librarymanagementsystem.application.dto.RegisterDto;
+import com.xiaoyi.librarymanagementsystem.application.dto.viewmodel.AuthViewModel;
 import com.xiaoyi.librarymanagementsystem.application.dto.viewmodel.UserDetailViewModel;
 import com.xiaoyi.librarymanagementsystem.application.dto.viewmodel.UserViewModel;
 import com.xiaoyi.librarymanagementsystem.application.facade.UserAppService;
 import com.xiaoyi.librarymanagementsystem.infrastructure.auth.AuthenticationService;
-import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.UserMapper;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,7 +48,7 @@ public class UserCtrl {
 	@PostMapping("auth/login")
 	@Tag(name = "auth")
 	@Operation(summary = "登录")
-	public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+	public ResponseEntity<AuthViewModel> login(@RequestBody LoginDto loginDto) {
 		return ResponseEntity.ok(authenticationService.login(loginDto));
 	}
 

@@ -7,7 +7,7 @@ import com.xiaoyi.librarymanagementsystem.application.facade.UserAppService;
 import com.xiaoyi.librarymanagementsystem.domain.user.entity.Borrow;
 import com.xiaoyi.librarymanagementsystem.domain.user.entity.User;
 import com.xiaoyi.librarymanagementsystem.domain.user.service.UserService;
-import com.xiaoyi.librarymanagementsystem.infrastructure.common.util.UserMapper;
+import com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers.UserMapper;
 import com.xiaoyi.librarymanagementsystem.infrastructure.exception.KeyIncorrectException;
 import com.xiaoyi.librarymanagementsystem.infrastructure.exception.PasswordIncorrectException;
 import com.xiaoyi.librarymanagementsystem.infrastructure.exception.RedisNotFoundException;

@@ -17,8 +17,10 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface BookRepository extends JpaRepository<BookPo, Integer> {
 
-	@Query(value = "SELECT pg_catalog.nextval('book_po_seq')", nativeQuery = true)
-	Integer getNextId();
+	@Query(value = """ 
+					  SELECT count(*) FROM BookPo b group by b.assortName
+					""")
+	int getCountGroupAssortName();
 
 //	@Query("""
 //					SELECT a.id as assortId,assortName as assortName,count(*) as count FROM BookPo b\s
@@ -30,5 +32,6 @@ public interface BookRepository extends JpaRepository<BookPo, Integer> {
 	@NotNull Page<BookPo> findAll(@NotNull Pageable pageable);
 
 	Page<BookPo> findByAssortName(Pageable pageable, String assortName);
+
 
 }

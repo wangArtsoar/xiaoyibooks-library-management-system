@@ -1,0 +1,152 @@
+/* 淡入动画 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* 应用淡入动画 */
+body {
+    background-image: url("../image/8st9naqd.png");
+    animation: fadeIn 3s;
+    font-family: Arial, 楷体, serif;
+    background-size: cover;
+}
+
+#header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#logoImg {
+    margin: 0;
+}
+
+#header form {
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+#search-form input[type="text"] {
+    font-size: 20px;
+    width: 700px;
+    height: 50px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+#header form input[type="submit"] {
+    font-size: 20px;
+    width: 100px;
+    height: 60px;
+    padding: 5px 10px;
+    background-color: lightblue;
+    border-radius: 12px;
+}
+
+#header form input[type="submit"]:hover {
+    background-color: dodgerblue;
+}
+
+#header form select {
+    margin-right: 10px;
+}
+
+#my-btn {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 100px;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+#logout-btn {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+#admin-btn {
+    display: none;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+#book-list {
+    margin-bottom: 20px;
+}
+
+#book-list div {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+#book-list div:last-child {
+    border-bottom: none;
+}
+
+label {
+    margin-right: 10px;
+}
+
+input[type="number"] {
+    width: 50px;
+}
+
+#page-info {
+    margin-top: 20px;
+}
+
+#no-books {
+    display: none;
+    text-align: center;
+    background-size: cover;
+}
+
+#no-books img {
+    max-width: 600px;
+    max-height: 400px;
+    margin-top: 200px;
+}
+
+#page-controls {
+    text-align: center;
+}
+
+#page-controls button {
+    background-color: cornflowerblue;
+    color: white;
+    border: none;
+    padding: 7px 14px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 8px 4px;
+    cursor: pointer;
+}
+
+#page-controls input[type="text"] {
+    width: 100px;
+    height: 30px;
+    background-color: seashell;
+    font-size: 20px;
+    color: thistle;
+    vertical-align: middle;
+    border-radius: 5px;
+}

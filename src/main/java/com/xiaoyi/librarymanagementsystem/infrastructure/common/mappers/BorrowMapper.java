@@ -1,4 +1,4 @@
-package com.xiaoyi.librarymanagementsystem.infrastructure.common.util;
+package com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers;
 
 import com.xiaoyi.librarymanagementsystem.application.dto.viewmodel.BorrowSimpleVo;
 import com.xiaoyi.librarymanagementsystem.application.dto.viewmodel.BorrowViewModel;

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图书分页</title>
+    <link href="../css/bookPage.css" rel="stylesheet">
+</head>
+<body>
+<img alt="" id="logoImg" src="../image/logo.PNG">
+<div id="header">
+    <form id="search-form">
+        <label for="search-query">
+            <input id="search-query" placeholder="搜索图书" type="text">
+        </label>
+        <input type="submit" value="搜索">
+    </form>
+    <button id="logout-btn">退出登录</button>
+    <button id="my-btn">我的</button>
+    <button id="admin-btn">管理</button>
+</div>
+<div id="book-list"></div>
+<div id="no-books">
+    <img alt="没有任何图书" src="../image/IMG_0895.PNG">
+</div>
+<div id="page-controls">
+    <div>
+        <button id="prev-page">上一页</button>
+        <button id="next-page">下一页</button>
+    </div>
+    <div>
+        <label>
+            <input id="go-to-page" type="text" value="1">
+        </label>
+        <button id="go-to-page-btn">跳转</button>
+    </div>
+</div>
+<div id="page-info"></div>
+<script src="../js/bookPage.js"></script>
+</body>
+</html>
+

@@ -39,4 +39,5 @@ public class BookPo {
 	private boolean isBorrow;
 	@Column(columnDefinition = "boolean default false")
 	private boolean isDelete;
+	private String filePath;
 }

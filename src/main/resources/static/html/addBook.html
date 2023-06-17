@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加图书</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="file"] {
+            margin-bottom: 20px;
+            padding: 5px;
+            width: 300px;
+        }
+
+        input[type="submit"] {
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>添加图书</h1>
+
+<form id="add-book-form">
+    <label>图书名称：</label>
+    <label for="book-name"><input id="book-name" type="text"></label>
+
+    <label>作者：</label>
+    <label for="book-author"><input id="book-author" type="text"></label>
+
+    <label>分类名称：</label>
+    <label for="book-assortName"><input id="book-assortName" type="text"></label>
+
+    <label>发布日期：</label>
+    <label for="book-publishDate"><input id="book-publishDate" type="date"></label>
+
+    <label>上传图书文件：</label>
+    <input id="book-file" type="file">
+
+    <input type="submit" value="添加图书">
+</form>
+
+<div id="message"></div>
+
+<script>
+    document.getElementById("add-book-form").onsubmit = function (event) {
+        event.preventDefault();
+
+        var name = document.getElementById("book-name").value;
+        var author = document.getElementById("book-author").value;
+        var assortName = document.getElementById("book-assortName").value;
+        var publishDate = document.getElementById("book-publishDate").value;
+        var file = document.getElementById("book-file").files[0];
+
+        var formData = new FormData();
+        formData.append("name", name);
+        formData.append("author", author);
+        formData.append("assortName", assortName);
+        formData.append("publishDate", publishDate);
+        formData.append("file", file);
+
+        fetch('/api/addBook', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("message").innerHTML = data;
+            });
+    };
+</script>
+</body>
+</html>

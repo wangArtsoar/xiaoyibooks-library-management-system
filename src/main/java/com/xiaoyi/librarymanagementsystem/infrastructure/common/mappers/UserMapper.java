@@ -1,4 +1,4 @@
-package com.xiaoyi.librarymanagementsystem.infrastructure.common.util;
+package com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers;
 
 import com.xiaoyi.librarymanagementsystem.application.dto.EditUserDto;
 import com.xiaoyi.librarymanagementsystem.application.dto.RegisterDto;

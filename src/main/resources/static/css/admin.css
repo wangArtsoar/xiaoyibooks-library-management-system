@@ -1,0 +1,101 @@
+body {
+    background-image: url("../image/3gh22xis.png");
+    background-size: cover;
+}
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+header nav ul li {
+    margin-left: 10px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 12% auto;
+    padding: 40px;
+    border: 2px solid #888;
+    width: 20%;
+    text-align: center;
+    border-radius: 20px;
+    font-size: 18px;
+    height: 500px;
+    overflow-y: auto;
+}
+
+/* 设置滚动条的样式（仅适用于WebKit内核的浏览器） */
+.modal-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: gray;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="file"] {
+    margin-bottom: 20px;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid whitesmoke;
+    border-bottom: 2px solid #ddd;
+}
+
+input[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: tomato;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: salmon;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer
+}

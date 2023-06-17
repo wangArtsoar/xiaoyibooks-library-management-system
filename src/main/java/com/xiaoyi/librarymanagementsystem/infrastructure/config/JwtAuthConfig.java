@@ -1,5 +1,6 @@
 package com.xiaoyi.librarymanagementsystem.infrastructure.config;
 
+import com.xiaoyi.librarymanagementsystem.domain.user.repository.persistence.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -7,7 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,7 +33,7 @@ public class JwtAuthConfig extends OncePerRequestFilter {
 
 	private final JwtUtils jwtUtils;
 	private final UserDetailsService userDetailsService;
-	private final RedisTemplate<String, Object> redisTemplate;
+	private final TokenRepository tokenRepository;
 
 	@Override
 	protected void doFilterInternal(
@@ -58,7 +58,7 @@ public class JwtAuthConfig extends OncePerRequestFilter {
 			return;
 		}
 		UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
-		if (Boolean.FALSE.equals(redisTemplate.hasKey(email)) || !jwtUtils.isTokenValid(jwt, userDetails)) {
+		if (tokenRepository.findByUserEmail(email).isEmpty() || !jwtUtils.isTokenValid(jwt, userDetails)) {
 			filterChain.doFilter(request, response);
 			return;
 		}

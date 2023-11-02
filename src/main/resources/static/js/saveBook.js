@@ -15,6 +15,7 @@ formForAdd.addEventListener('submit', function (event) {
     formData.append('publishDate', bookPublishDate);
     formData.append('file', bookFile);
     const token = localStorage.getItem("token");
+    console.log("token : ",token)
     fetch('http://localhost:8080/api/book/admin/addBook', {
         method: 'POST',
         headers: {

@@ -29,5 +29,6 @@ public class TokenPo {
 	@JoinColumn(name = "user_email", referencedColumnName = "email",
 					foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
 	private UserPo userPo;
+	@Column(columnDefinition = "boolean default false")
 	private boolean invalid;
 }

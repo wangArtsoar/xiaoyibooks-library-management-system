@@ -12,7 +12,7 @@ document.getElementById("upgradeBtn").onclick = function () {
 
 // 点击模态框外部时关闭模态框
 window.onclick = function (event) {
-    if (event.target == addModal || event.target == upgradeModal) {
+    if (event.target === addModal || event.target === upgradeModal) {
         addModal.style.display = "none";
         upgradeModal.style.display = "none";
     }

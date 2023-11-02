@@ -3,12 +3,13 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/demofromddd
     username: postgres
-    password: xiaoyi_wyx
+    password: xiaoyi
+#    password: xiaoyi_wyx
     driver-class-name: org.postgresql.Driver
   # 配置jpa
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:

@@ -1,7 +1,9 @@
 package com.xiaoyi.librarymanagementsystem.infrastructure.config;
 
+import com.xiaoyi.librarymanagementsystem.domain.user.entity.User;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.persistence.TokenRepository;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.po.TokenPo;
+import com.xiaoyi.librarymanagementsystem.domain.user.repository.po.UserPo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -15,6 +17,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -62,15 +67,15 @@ public class JwtUtils {
 
 	public boolean isTokenValid(String jwt, @NotNull UserDetails userDetails) {
 		String email = extractUsername(jwt);
-		boolean isExtractExpiration = extractExpiration(jwt).after(new Date());
+		boolean isExtractExpiration = extractExpiration(jwt).before(new Date());
 		changeTokenState(isExtractExpiration, email);
-		return userDetails.getUsername().equals(email) && isExtractExpiration;
+		return userDetails.getUsername().equals(email) && !isExtractExpiration;
 	}
 
 	private void changeTokenState(boolean isExtractExpiration, String email) {
 		if (!isExtractExpiration) return;
 		TokenPo tokenPo = tokenRepository.findByUserEmail(email).orElse(null);
-		if (tokenPo==null) return;
+		if (tokenPo == null) return;
 		tokenPo.setInvalid(true);
 		tokenRepository.save(tokenPo);
 	}

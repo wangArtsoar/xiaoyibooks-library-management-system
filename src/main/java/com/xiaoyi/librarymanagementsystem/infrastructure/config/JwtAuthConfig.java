@@ -1,6 +1,8 @@
 package com.xiaoyi.librarymanagementsystem.infrastructure.config;
 
+import com.xiaoyi.librarymanagementsystem.domain.user.entity.User;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.persistence.TokenRepository;
+import com.xiaoyi.librarymanagementsystem.domain.user.repository.po.UserPo;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

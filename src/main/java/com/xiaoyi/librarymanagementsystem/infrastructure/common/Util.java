@@ -1,5 +1,6 @@
 package com.xiaoyi.librarymanagementsystem.infrastructure.common;
 
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -15,15 +16,14 @@ import java.util.UUID;
  * @github <a href="https://github.com/Tom-Collection>...</a>
  */
 public class Util {
-	public static void saveFileToServer(MultipartFile file) {
-		// 指定文件保存的位置
-		String savePath = "C:\\Users\\26034\\Downloads\\";
+
+	public void saveFileToServer(MultipartFile file, Resource resource) {
 		// 获取文件名
 		String fileName = file.getOriginalFilename();
 		// 创建文件对象
 		assert fileName!=null;
-		File saveFile = new File(savePath, UUID.randomUUID() + fileName);
 		try {
+			File saveFile = new File(resource.getFile(), UUID.randomUUID() + fileName);
 			// 将文件保存到服务器上的指定位置
 			file.transferTo(saveFile);
 			// 返回文件的路径

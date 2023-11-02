@@ -10,6 +10,8 @@ import com.xiaoyi.librarymanagementsystem.infrastructure.common.Util;
 import com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers.BookMapper;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,9 +36,14 @@ public class BookAppServiceImpl implements BookAppService {
 	private final BookService bookService;
 	private final BookMapper bookMapper = Mappers.getMapper(BookMapper.class);
 
+	private final ResourceLoader resourceLoader;
+
+	private final Util util = new Util();
+
 	@Override
 	public Book addBook(BookDto bookDto) {
-		Util.saveFileToServer(bookDto.file());
+		Resource resource = resourceLoader.getResource("classpath:/files/");
+		util.saveFileToServer(bookDto.file(),resource);
 		return bookService.addBook(bookMapper.bookDtoToBook(bookDto));
 	}
 

@@ -23,7 +23,6 @@ public interface UserRepository extends JpaRepository<UserPo, Integer> {
 
 	Optional<UserPo> findByEmail(String email);
 
-	@Query("select u.name,u.email,u.role from UserPo u")
 	Optional<UserPoInfo> findUserPoByEmail(String email);
 
 	int countByRole(Role role);

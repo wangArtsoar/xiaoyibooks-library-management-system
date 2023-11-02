@@ -44,6 +44,7 @@ public class AuthenticationService {
 		var tokenPo = TokenPo
 						.builder()
 						.token(token)
+						.invalid(false)
 						.userPo(userPo)
 						.build();
 		tokenRepository.save(tokenPo);

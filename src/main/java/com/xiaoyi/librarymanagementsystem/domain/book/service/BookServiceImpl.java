@@ -59,7 +59,7 @@ public class BookServiceImpl implements BookService {
 	public Book addBook(Book book) {
 		TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
 		try {
-			assortRepository.save(AssortPo.builder().name(book.getAssortName()).build());
+			assortRepository.saveAndFlush(AssortPo.builder().name(book.getAssortName()).build());
 			Book bookResponse = bookMapper.bookPoToBook(bookRepository.save(updateBookPo(book)));
 			transactionManager.commit(status);
 			return bookResponse;
@@ -78,7 +78,10 @@ public class BookServiceImpl implements BookService {
 	}
 
 	private String getBookAddress() {
-		int next = bookRepository.getCountGroupAssortName() + 1;
+		int next;
+		Integer i = bookRepository.getCountGroupAssortName();
+		if (i == null) next = 1;
+		else next = i + 1;
 		return next < 100 ? String.format("%03d", next + 1):String.valueOf(next + 1);
 	}
 

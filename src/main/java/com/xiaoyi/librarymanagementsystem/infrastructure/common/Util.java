@@ -17,17 +17,19 @@ import java.util.UUID;
  */
 public class Util {
 
-	public void saveFileToServer(MultipartFile file, Resource resource) {
+	public String saveFileToServer(MultipartFile file, Resource resource) {
 		// 获取文件名
 		String fileName = file.getOriginalFilename();
 		// 创建文件对象
 		assert fileName!=null;
+		String filePath = UUID.randomUUID() + fileName;
 		try {
-			File saveFile = new File(resource.getFile(), UUID.randomUUID() + fileName);
+			File saveFile = new File(resource.getFile(), filePath);
 			// 将文件保存到服务器上的指定位置
 			file.transferTo(saveFile);
 			// 返回文件的路径
 			System.out.println(saveFile.getAbsolutePath());
+			return filePath;
 		} catch (IOException e) {
 			throw new RuntimeException("保存文件失败" + e);
 		}

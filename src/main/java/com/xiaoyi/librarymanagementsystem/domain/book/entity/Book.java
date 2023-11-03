@@ -23,6 +23,8 @@ public class Book {
 	private Integer id;
 	private String name;
 	private String author;
+	private String fileSize;
+	private String Introduction;
 	private boolean isBorrow;
 	private boolean isDelete;
 	private Date publishDate;

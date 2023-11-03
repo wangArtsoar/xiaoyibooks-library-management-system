@@ -32,13 +32,15 @@ function renderPage() {
         const publishDate = formatter.format (new Date(book.publishDate));
 
         bookElement.innerHTML +=
-            ` <div style="margin: 20px">
-                《 ${book.name} 》 <br>
-                作者 : ${book.author}  <br>
-                分类 : ${book.assortName} <br>
-                位置 : ${book.address} <br>
-                创建于 : ${createAt} <br>
-                发布于 : ${publishDate} <br>
+            ` <div style="margin: 20px;display: flex">
+                <img id="details" style="width: 20%" src="../files/${book.filePath}" alt="${book.name}">
+                <div>
+                    <p style="font-style: oblique;">《 ${book.name} 》</p>
+                    <a>作者 : ${book.author}</a> &nbsp;&nbsp;
+                    <a>分类 : ${book.assortName}</a> <br>
+                    位置 : ${book.address} <br>
+                    发布于 : ${publishDate} <br>
+                </div>
               </div>  
             `;
         bookList.appendChild(bookElement);

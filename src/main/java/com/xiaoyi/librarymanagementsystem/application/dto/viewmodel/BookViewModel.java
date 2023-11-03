@@ -12,7 +12,7 @@ import java.util.Date;
  * @email xiaoyi_wyx@icloud.com
  * @github <a href="https://github.com/Tom-Collection>...</a>
  */
-public record BookViewModel(int id, String name, String assortName, String address, String author,
+public record BookViewModel(int id, String name, String assortName, String address, String author,String filePath,
                             @DateTimeFormat(
 				                            iso = DateTimeFormat.ISO.DATE,
 				                            pattern = "yyyy/MM/dd"

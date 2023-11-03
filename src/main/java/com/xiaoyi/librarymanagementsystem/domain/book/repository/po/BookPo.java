@@ -30,6 +30,8 @@ public class BookPo {
 	private Integer id;
 	private String name;
 	private String author;
+	private String fileSize;
+	private String Introduction;
 	private Date publishDate;
 	private Date createAt;
 	private Date updateAt;

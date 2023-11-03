@@ -42,9 +42,11 @@ public class BookAppServiceImpl implements BookAppService {
 
 	@Override
 	public Book addBook(BookDto bookDto) {
-		Resource resource = resourceLoader.getResource("classpath:/files/");
-		util.saveFileToServer(bookDto.file(),resource);
-		return bookService.addBook(bookMapper.bookDtoToBook(bookDto));
+		Resource resource = resourceLoader.getResource("classpath:/static/files/");
+		String filePath = util.saveFileToServer(bookDto.file(),resource);
+		Book book = bookMapper.bookDtoToBook(bookDto);
+		book.setFilePath(filePath);
+		return bookService.addBook(book);
 	}
 
 	@Override

@@ -1,4 +1,5 @@
 window.addEventListener('load', () => {
+
     setTimeout(() => {
         let welcomeMessage = document.getElementById('welcome-message');
         welcomeMessage.classList.add('messageFadeOut');

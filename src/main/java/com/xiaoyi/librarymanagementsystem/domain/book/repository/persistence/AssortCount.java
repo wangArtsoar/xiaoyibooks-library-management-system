@@ -9,8 +9,6 @@ package com.xiaoyi.librarymanagementsystem.domain.book.repository.persistence;
  * @github <a href="https://github.com/Tom-Collection>...</a>
  */
 public interface AssortCount {
-	Integer getAssortId();
-
 	String getAssortName();
 
 	Integer getCount();

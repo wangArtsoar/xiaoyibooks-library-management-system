@@ -9,6 +9,10 @@ document.getElementById("addBtn").onclick = function () {
 document.getElementById("upgradeBtn").onclick = function () {
     upgradeModal.style.display = "block";
 }
+document.getElementById("indexBtn").onclick = function () {
+    // 加载一个新的文档：
+    window.location.assign("bookPage.html"); // 跳转到你的首页
+}
 
 // 点击模态框外部时关闭模态框
 window.onclick = function (event) {

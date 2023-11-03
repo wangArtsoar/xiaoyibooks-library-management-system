@@ -1,6 +1,7 @@
 package com.xiaoyi.librarymanagementsystem.domain.book.service;
 
 import com.xiaoyi.librarymanagementsystem.domain.book.entity.Book;
+import com.xiaoyi.librarymanagementsystem.domain.book.repository.persistence.AssortCount;
 import com.xiaoyi.librarymanagementsystem.domain.book.repository.persistence.AssortRepository;
 import com.xiaoyi.librarymanagementsystem.domain.book.repository.persistence.BookRepository;
 import com.xiaoyi.librarymanagementsystem.domain.book.repository.po.AssortPo;
@@ -59,7 +60,9 @@ public class BookServiceImpl implements BookService {
 	public Book addBook(Book book) {
 		TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
 		try {
-			assortRepository.saveAndFlush(AssortPo.builder().name(book.getAssortName()).build());
+			if (assortRepository.findByName(book.getAssortName()) == null) {
+				assortRepository.saveAndFlush(AssortPo.builder().name(book.getAssortName()).build());
+			}
 			Book bookResponse = bookMapper.bookPoToBook(bookRepository.save(updateBookPo(book)));
 			transactionManager.commit(status);
 			return bookResponse;
@@ -72,17 +75,20 @@ public class BookServiceImpl implements BookService {
 	private BookPo updateBookPo(Book book) {
 		BookPo bookPo = bookMapper.bookToBookPo(book);
 		bookPo.setCreateAt(new Date());
-		String address = getBookAddress();
+		String address = getBookAddress(book.getAssortName());
 		bookPo.setAddress(bookPo.getAssortName() + address);
 		return bookPo;
 	}
 
-	private String getBookAddress() {
+	private String getBookAddress(String AssortCount) {
 		int next;
-		Integer i = bookRepository.getCountGroupAssortName();
-		if (i == null) next = 1;
-		else next = i + 1;
-		return next < 100 ? String.format("%03d", next + 1):String.valueOf(next + 1);
+		Integer i = bookRepository.getCountByAssortName(AssortCount);
+		if (i == null) {
+			next = 1;
+		} else {
+			next = i + 1;
+		}
+		return next < 100 ? String.format("%03d", next):String.valueOf(next);
 	}
 
 	@Override

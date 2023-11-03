@@ -20,10 +20,27 @@ function renderPage() {
     let startIndex = currentPage * booksPerPage;
     let endIndex = Math.min(startIndex + booksPerPage, books.length);
 
+    let bookElement = document.createElement("div");
+    bookElement.style.color = 'white'
+    bookElement.style.display = 'flex'
     for (let i = startIndex; i < endIndex; i++) {
-        let book = books[i];
-        let bookElement = document.createElement("div");
-        bookElement.innerHTML = book.name + " - " + book.author + " - " + book.assortName + " - " + book.address + " - 创建于：" + book.createAt + " - 发布于：" + book.publishDate;
+        const book = books[i];
+        const formatter = new Intl.DateTimeFormat ("zh-CN", {year: "numeric", month: "2-digit", day: "2-digit"});
+
+        // 用格式化器的format()方法来将Date对象转换为字符串
+        const createAt = formatter.format (new Date(book.createAt));
+        const publishDate = formatter.format (new Date(book.publishDate));
+
+        bookElement.innerHTML +=
+            ` <div style="margin: 20px">
+                《 ${book.name} 》 <br>
+                作者 : ${book.author}  <br>
+                分类 : ${book.assortName} <br>
+                位置 : ${book.address} <br>
+                创建于 : ${createAt} <br>
+                发布于 : ${publishDate} <br>
+              </div>  
+            `;
         bookList.appendChild(bookElement);
     }
 

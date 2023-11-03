@@ -27,4 +27,5 @@ formForAdd.addEventListener('submit', function (event) {
         .then(data => {
             console.log(data);
         });
+    location.reload()
 });

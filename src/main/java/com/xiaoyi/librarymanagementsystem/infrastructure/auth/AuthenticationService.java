@@ -39,6 +39,7 @@ public class AuthenticationService {
 	public String register(RegisterDto registerDto) {
 		User user = userMapper.registerDtoToUser(registerDto);
 		user.setPwd(passwordEncoder.encode(user.getPwd()));
+		user.setRole(Role.USER);
 		UserPo userPo = userRepository.save(userMapper.userToUserPo(user));
 		String token = jwtUtils.generateToken(userPo);
 		var tokenPo = TokenPo

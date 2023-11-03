@@ -19,7 +19,7 @@ public class LibraryManagementSystemApplication {
 		SpringApplication.run(LibraryManagementSystemApplication.class, args);
 		// 在项目启动后自动打开登录页面
 		try {
-			Runtime.getRuntime().exec("cmd /c start http://localhost:8080/index.html");
+			Runtime.getRuntime().exec("cmd /c start http://localhost:8080/html/bookPage.html");
 		} catch (IOException e) {
 			throw new RuntimeException("无法在浏览器中打开 http://localhost:8080/index.html" + e);
 		}

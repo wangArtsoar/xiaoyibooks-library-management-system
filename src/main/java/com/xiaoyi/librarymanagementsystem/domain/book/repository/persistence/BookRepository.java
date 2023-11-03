@@ -18,9 +18,9 @@ import org.springframework.data.jpa.repository.Query;
 public interface BookRepository extends JpaRepository<BookPo, Integer> {
 
 	@Query(value = """ 
-					  SELECT count(*) FROM BookPo b group by b.assortName
+					  SELECT count(*) FROM BookPo b where b.assortName = :assortName
 					""")
-	Integer getCountGroupAssortName();
+	Integer getCountByAssortName(String assortName);
 
 //	@Query("""
 //					SELECT a.id as assortId,assortName as assortName,count(*) as count FROM BookPo b\s

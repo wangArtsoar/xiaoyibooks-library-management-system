@@ -17,17 +17,19 @@ import java.util.List;
  * @github <a href="https://github.com/Tom-Collection>...</a>
  */
 public interface BookService {
-	Book addBook(Book book);
+    Book addBook(Book book);
 
-	Page<Book> findAllByPageable(Pageable pageable);
+    Page<Book> findAllByPageable(Pageable pageable);
 
-	Page<Book> findByAssortName(Pageable pageable, String assortName);
+    Page<Book> findByAssortName(Pageable pageable, String assortName);
 
-	Book editBook(Integer id, Book book);
+    Book editBook(Integer id, Book book);
 
-	Borrow borrowBook(String email, Integer bookId);
+    Borrow borrowBook(String email, Integer bookId);
 
-	Page<Book> findAllByTemp(String temp, Pageable pageable);
+    Page<Book> findAllByTemp(String temp, Pageable pageable);
 
-	List<Borrow> getBorrowByUser(User user);
+    List<Borrow> getBorrowByUser(User user);
+
+    Book findById(Integer id);
 }

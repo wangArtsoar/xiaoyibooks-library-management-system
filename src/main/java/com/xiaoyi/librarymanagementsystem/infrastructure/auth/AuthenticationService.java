@@ -65,5 +65,4 @@ public class AuthenticationService {
 		return new AuthViewModel(token, userPo.getRole().equals(Role.ADMIN));
 	}
 
-	
 }

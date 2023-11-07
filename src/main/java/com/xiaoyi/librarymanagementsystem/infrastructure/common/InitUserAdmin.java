@@ -4,6 +4,7 @@ import com.xiaoyi.librarymanagementsystem.domain.user.repository.persistence.Use
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.po.UserPo;
 import com.xiaoyi.librarymanagementsystem.domain.user.valueobject.Role;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,20 +22,20 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class InitUserAdmin implements ApplicationListener<ContextRefreshedEvent> {
 
-	private final UserRepository userRepository;
-	private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-	@Override
-	public void onApplicationEvent(ContextRefreshedEvent event) {
-		if (userRepository.countByRole(Role.ADMIN) > 0) {
-			return;
-		}
-		userRepository.save(UserPo
-						.builder()
-						.name("init_admin")
-						.email("init_admin@admin.com")
-						.role(Role.ADMIN)
-						.pwd(passwordEncoder.encode("initAdmin"))
-						.build());
-	}
+    @Override
+    public void onApplicationEvent(@NotNull ContextRefreshedEvent event) {
+        if (userRepository.countByRole(Role.ADMIN) > 0) {
+            return;
+        }
+        userRepository.save(UserPo
+                .builder()
+                .name("init_admin")
+                .email("init_admin@admin.com")
+                .role(Role.ADMIN)
+                .pwd(passwordEncoder.encode("initAdmin"))
+                .build());
+    }
 }

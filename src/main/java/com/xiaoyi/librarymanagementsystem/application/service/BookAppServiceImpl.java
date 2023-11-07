@@ -33,53 +33,58 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookAppServiceImpl implements BookAppService {
 
-	private final BookService bookService;
-	private final BookMapper bookMapper = Mappers.getMapper(BookMapper.class);
+    private final BookService bookService;
+    private final BookMapper bookMapper = Mappers.getMapper(BookMapper.class);
 
-	private final ResourceLoader resourceLoader;
+    private final ResourceLoader resourceLoader;
 
-	private final Util util = new Util();
+    private final Util util = new Util();
 
-	@Override
-	public Book addBook(BookDto bookDto) {
-		Resource resource = resourceLoader.getResource("classpath:/static/files/");
-		String filePath = util.saveFileToServer(bookDto.file(),resource);
-		Book book = bookMapper.bookDtoToBook(bookDto);
-		book.setFilePath(filePath);
-		return bookService.addBook(book);
-	}
+    @Override
+    public Book addBook(BookDto bookDto) {
+        Resource resource = resourceLoader.getResource("classpath:/static/files/");
+        String filePath = util.saveFileToServer(bookDto.file(), resource);
+        Book book = bookMapper.bookDtoToBook(bookDto);
+        book.setFilePath(filePath);
+        return bookService.addBook(book);
+    }
 
-	@Override
-	public Page<Book> findAllBooks(int page, int size) {
-		Pageable pageable = PageRequest.of(page, size);
-		return bookService.findAllByPageable(pageable);
-	}
+    @Override
+    public Page<Book> findAllBooks(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return bookService.findAllByPageable(pageable);
+    }
 
-	@Override
-	public Page<Book> findByAssortName(int page, int size, String assortName) {
-		Pageable pageable = PageRequest.of(page, size);
-		return bookService.findByAssortName(pageable, assortName);
-	}
+    @Override
+    public Page<Book> findByAssortName(int page, int size, String assortName) {
+        Pageable pageable = PageRequest.of(page, size);
+        return bookService.findByAssortName(pageable, assortName);
+    }
 
-	@Override
-	public Book editBook(Integer id, BookDto bookDto) {
-		return bookService.editBook(id, bookMapper.bookDtoToBook(bookDto));
-	}
+    @Override
+    public Book editBook(Integer id, BookDto bookDto) {
+        return bookService.editBook(id, bookMapper.bookDtoToBook(bookDto));
+    }
 
-	@Override
-	public Borrow borrowBook(Integer bookId) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String email = authentication.getName();
-		return bookService.borrowBook(email, bookId);
-	}
+    @Override
+    public Borrow borrowBook(Integer bookId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return bookService.borrowBook(email, bookId);
+    }
 
-	@Override
-	public Page<Book> findAllByTemp(String temp, Pageable pageable) {
-		return bookService.findAllByTemp(temp, pageable);
-	}
+    @Override
+    public Page<Book> findAllByTemp(String temp, Pageable pageable) {
+        return bookService.findAllByTemp(temp, pageable);
+    }
 
-	@Override
-	public List<Borrow> findBorrowByUser(User user) {
-		return bookService.getBorrowByUser(user);
-	}
+    @Override
+    public List<Borrow> findBorrowByUser(User user) {
+        return bookService.getBorrowByUser(user);
+    }
+
+    @Override
+    public Book findById(Integer id) {
+        return bookService.findById(id);
+    }
 }

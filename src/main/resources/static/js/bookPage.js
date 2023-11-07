@@ -3,6 +3,19 @@ let booksPerPage = 21;
 let currentPage = 0;
 let totalPages = 0;
 
+function f() {
+    const token = localStorage.getItem("token");
+    fetch(`http://localhost:8080/api/user/auth/f?jwt=${token}`, {})
+        .then(response => response.json())
+        .then(data => {
+            if (!data) {
+                window.location.href = "../index.html"
+            }
+        })
+}
+
+f()
+
 function renderPage() {
     const bookList = document.getElementById("book-list");
     bookList.innerHTML = "";
@@ -25,28 +38,43 @@ function renderPage() {
     bookElement.style.display = 'flex'
     for (let i = startIndex; i < endIndex; i++) {
         const book = books[i];
-        const formatter = new Intl.DateTimeFormat ("zh-CN", {year: "numeric", month: "2-digit", day: "2-digit"});
+        const formatter = new Intl.DateTimeFormat("zh-CN", {year: "numeric", month: "2-digit", day: "2-digit"});
 
         // 用格式化器的format()方法来将Date对象转换为字符串
-        const createAt = formatter.format (new Date(book.createAt));
-        const publishDate = formatter.format (new Date(book.publishDate));
+        const createAt = formatter.format(new Date(book.createAt));
+        const publishDate = formatter.format(new Date(book.publishDate));
 
         bookElement.innerHTML +=
-            ` <div style="margin: 20px;display: flex">
-                <img id="details" style="width: 20%" src="../files/${book.filePath}" alt="${book.name}">
-                <div>
-                    <p style="font-style: oblique;">《 ${book.name} 》</p>
-                    <a>作者 : ${book.author}</a> &nbsp;&nbsp;
-                    <a>分类 : ${book.assortName}</a> <br>
-                    位置 : ${book.address} <br>
-                    发布于 : ${publishDate} <br>
-                </div>
-              </div>  
+            `
+             <div class="book-container" onclick="details(${book.id})">
+                    <div class="book-image">
+                        <img class="file-img" src="../files/${book.filePath}" alt="${book.name}">
+                    </div>
+                    <div class="book-info">
+                        <p class="book-name">《 ${book.name} 》</p>
+                        <p class="book-author">&nbsp;&nbsp;&nbsp;&nbsp;作者 : ${book.author}</p>
+                        <p class="book-assort">&nbsp;&nbsp;&nbsp;&nbsp;分类 : ${book.assortName}</p>
+                    </div>
+            </div>
             `;
         bookList.appendChild(bookElement);
     }
 
     document.getElementById("page-info").innerHTML = "第 " + (currentPage + 1) + " 页 / 共 " + totalPages + " 页";
+}
+
+
+function details(id) {
+    const token = localStorage.getItem("token");
+    fetch("../api/book/findBookById/" + id, {
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    }).then(response => response.json())
+        .then(data => {
+            localStorage.setItem("bookDetail", JSON.stringify(data))
+            window.location.href = "bookDetail.html"
+        })
 }
 
 document.getElementById("prev-page").onclick = function () {

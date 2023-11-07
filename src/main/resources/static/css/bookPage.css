@@ -91,11 +91,6 @@ body {
     margin-bottom: 20px;
 }
 
-#book-list div {
-    border-bottom: 1px solid #ccc;
-    padding: 10px 0;
-}
-
 #book-list div:last-child {
     border-bottom: none;
 }
@@ -149,4 +144,40 @@ input[type="number"] {
     color: thistle;
     vertical-align: middle;
     border-radius: 5px;
+}
+
+.book-container {
+    margin: 20px;
+    display: flex;
+}
+
+.book-link {
+    text-decoration: none;
+    color: black;
+}
+
+.book-image {
+    display: block;
+    width: 20%;
+}
+
+.file-img {
+    width: 100%;
+    float: left;
+}
+
+.book-info {
+    display: block;
+    color: #dddddd;
+    /*float: left;*/
+}
+
+.book-name {
+    font-style: oblique;
+    font-size: 20px;
+}
+
+.book-author, .book-assort {
+    display: block;
+    margin-right: 10px;
 }

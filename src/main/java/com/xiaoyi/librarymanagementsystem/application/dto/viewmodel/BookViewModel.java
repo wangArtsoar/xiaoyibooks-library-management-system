@@ -12,13 +12,14 @@ import java.util.Date;
  * @email xiaoyi_wyx@icloud.com
  * @github <a href="https://github.com/Tom-Collection>...</a>
  */
-public record BookViewModel(int id, String name, String assortName, String address, String author,String filePath,
+public record BookViewModel(int id, String name, String assortName, String address,
+                            String author, String filePath, String Introduction,
                             @DateTimeFormat(
-				                            iso = DateTimeFormat.ISO.DATE,
-				                            pattern = "yyyy/MM/dd"
+                                    iso = DateTimeFormat.ISO.DATE,
+                                    pattern = "yyyy/MM/dd"
                             ) Date createAt,
                             @DateTimeFormat(
-				                            iso = DateTimeFormat.ISO.DATE,
-				                            pattern = "yyyy/MM/dd"
+                                    iso = DateTimeFormat.ISO.DATE,
+                                    pattern = "yyyy/MM/dd"
                             ) Date publishDate) {
 }

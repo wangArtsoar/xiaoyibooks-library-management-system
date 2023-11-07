@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="book-detail">
+
+</div>
+
+<script>
+    let item = JSON.parse(localStorage.getItem("bookDetail"));
+    let elementById = document.getElementById("book-detail");
+    elementById.innerHTML = `
+        <img src="../files/${item.filePath}" alt="${item.name}"/>
+        <span>${item.createAt}</span>
+        <span>${item.assortName}</span>
+        <span>${item.address}</span>
+        <span>${item.Introduction}</span>
+    `
+    localStorage.removeItem("bookDetail")
+</script>
+</body>
+</html>

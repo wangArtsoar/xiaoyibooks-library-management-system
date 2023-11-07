@@ -1,9 +1,7 @@
 package com.xiaoyi.librarymanagementsystem.infrastructure.config;
 
-import com.xiaoyi.librarymanagementsystem.domain.user.entity.User;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.persistence.TokenRepository;
 import com.xiaoyi.librarymanagementsystem.domain.user.repository.po.TokenPo;
-import com.xiaoyi.librarymanagementsystem.domain.user.repository.po.UserPo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,9 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -34,63 +29,67 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtUtils {
 
-	private final TokenRepository tokenRepository;
-	@Value("${application.security.jwt.secret-key}")
-	private String secretKey;
-	@Value("${application.security.jwt.expiration}")
-	private Long expiration;
+    private final TokenRepository tokenRepository;
+    @Value("${application.security.jwt.secret-key}")
+    private String secretKey;
+    @Value("${application.security.jwt.expiration}")
+    private Long expiration;
 
-	public String extractUsername(String jwt) {
-		return extractClaim(jwt, Claims::getSubject);
-	}
+    public String extractUsername(String jwt) {
+        return extractClaim(jwt, Claims::getSubject);
+    }
 
-	private <T> T extractClaim(String jwt, @NotNull Function<Claims, T> claimResolver) {
-		final Claims claims = extractAllClaims(jwt);
-		return claimResolver.apply(claims);
-	}
+    private <T> T extractClaim(String jwt, @NotNull Function<Claims, T> claimResolver) {
+        final Claims claims = extractAllClaims(jwt);
+        return claimResolver.apply(claims);
+    }
 
-	private Claims extractAllClaims(String jwt) {
-		return Jwts
-						.parserBuilder()
-						.setSigningKey(getSigningKey(secretKey))
-						.build()
-						.parseClaimsJws(jwt)
-						.getBody();
-	}
+    private Claims extractAllClaims(String jwt) {
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(getSigningKey(secretKey))
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody();
+    }
 
-	private @NotNull Key getSigningKey(String secretKey) {
-		// 从一个 Base64 编码的字符串 编码成 byte数组
-		byte[] bytes = Decoders.BASE64.decode(secretKey);
-		// 创建一个 HMAC-SHA 签名密钥
-		return Keys.hmacShaKeyFor(bytes);
-	}
+    private @NotNull Key getSigningKey(String secretKey) {
+        // 从一个 Base64 编码的字符串 编码成 byte数组
+        byte[] bytes = Decoders.BASE64.decode(secretKey);
+        // 创建一个 HMAC-SHA 签名密钥
+        return Keys.hmacShaKeyFor(bytes);
+    }
 
-	public boolean isTokenValid(String jwt, @NotNull UserDetails userDetails) {
-		String email = extractUsername(jwt);
-		boolean isExtractExpiration = extractExpiration(jwt).before(new Date());
-		changeTokenState(isExtractExpiration, email);
-		return userDetails.getUsername().equals(email) && !isExtractExpiration;
-	}
+    public boolean isTokenValid(String jwt, @NotNull UserDetails userDetails) {
+        String email = extractUsername(jwt);
+        boolean isExtractExpiration = extractExpiration(jwt).before(new Date());
+        changeTokenState(isExtractExpiration, email);
+        return userDetails.getUsername().equals(email) && !isExtractExpiration;
+    }
 
-	private void changeTokenState(boolean isExtractExpiration, String email) {
-		if (!isExtractExpiration) return;
-		TokenPo tokenPo = tokenRepository.findByUserEmail(email).orElse(null);
-		if (tokenPo == null) return;
-		tokenPo.setInvalid(true);
-		tokenRepository.save(tokenPo);
-	}
+    public boolean isTokenValid(String jwt) {
+        return extractExpiration(jwt).after(new Date());
+    }
 
-	private Date extractExpiration(String jwt) {
-		return extractClaim(jwt, Claims::getExpiration);
-	}
+    private void changeTokenState(boolean isExtractExpiration, String email) {
+        if (!isExtractExpiration) return;
+        TokenPo tokenPo = tokenRepository.findByUserEmail(email).orElse(null);
+        if (tokenPo == null) return;
+        tokenPo.setInvalid(true);
+        tokenRepository.save(tokenPo);
+    }
 
-	public String generateToken(@NotNull UserDetails user) {
-		return Jwts
-						.builder()
-						.setSubject(user.getUsername())
-						.setIssuedAt(new Date(System.currentTimeMillis()))
-						.setExpiration(new Date(System.currentTimeMillis() + expiration))
-						.signWith(getSigningKey(secretKey), SignatureAlgorithm.HS256)
-						.compact();
-	}
+    private Date extractExpiration(String jwt) {
+        return extractClaim(jwt, Claims::getExpiration);
+    }
+
+    public String generateToken(@NotNull UserDetails user) {
+        return Jwts
+                .builder()
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey(secretKey), SignatureAlgorithm.HS256)
+                .compact();
+    }
 }

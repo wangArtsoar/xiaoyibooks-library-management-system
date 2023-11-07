@@ -18,17 +18,19 @@ import java.util.List;
  * @github <a href="https://github.com/Tom-Collection>...</a>
  */
 public interface BookAppService {
-	Book addBook(BookDto bookDto);
+    Book addBook(BookDto bookDto);
 
-	Page<Book> findAllBooks(int page, int size);
+    Page<Book> findAllBooks(int page, int size);
 
-	Page<Book> findByAssortName(int page, int size, String assortName);
+    Page<Book> findByAssortName(int page, int size, String assortName);
 
-	Book editBook(Integer id, BookDto bookDto);
+    Book editBook(Integer id, BookDto bookDto);
 
-	Borrow borrowBook(Integer bookId);
+    Borrow borrowBook(Integer bookId);
 
-	Page<Book> findAllByTemp(String temp, Pageable pageable);
+    Page<Book> findAllByTemp(String temp, Pageable pageable);
 
-	List<Borrow> findBorrowByUser(User user);
+    List<Borrow> findBorrowByUser(User user);
+
+    Book findById(Integer id);
 }

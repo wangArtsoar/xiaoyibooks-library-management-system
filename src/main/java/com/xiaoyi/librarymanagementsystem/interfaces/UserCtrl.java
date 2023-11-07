@@ -8,8 +8,10 @@ import com.xiaoyi.librarymanagementsystem.application.dto.viewmodel.AuthViewMode
 import com.xiaoyi.librarymanagementsystem.application.dto.viewmodel.UserDetailViewModel;
 import com.xiaoyi.librarymanagementsystem.application.dto.viewmodel.UserViewModel;
 import com.xiaoyi.librarymanagementsystem.application.facade.UserAppService;
+import com.xiaoyi.librarymanagementsystem.domain.user.repository.persistence.TokenRepository;
 import com.xiaoyi.librarymanagementsystem.infrastructure.auth.AuthenticationService;
 import com.xiaoyi.librarymanagementsystem.infrastructure.common.mappers.UserMapper;
+import com.xiaoyi.librarymanagementsystem.infrastructure.config.JwtUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,68 +36,81 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class UserCtrl {
 
-	private final UserAppService userAppService;
-	private final AuthenticationService authenticationService;
-	private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+    private final UserAppService userAppService;
+    private final AuthenticationService authenticationService;
+    private final JwtUtils jwtUtils;
+    private final TokenRepository tokenRepository;
+    private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
-	@PostMapping("auth/register")
-	@Tag(name = "auth", description = "认证")
-	@Operation(summary = "注册")
-	public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
-		return ResponseEntity.ok(authenticationService.register(registerDto));
-	}
+    @GetMapping("auth/f")
+    public boolean f(String jwt) {
+        if (jwt == null || jwt.isEmpty()) return false;
+        try {
+            tokenRepository.findByToken(jwt).orElseThrow();
+            return jwtUtils.isTokenValid(jwt);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
-	@PostMapping("auth/login")
-	@Tag(name = "auth")
-	@Operation(summary = "登录")
-	public ResponseEntity<AuthViewModel> login(@RequestBody LoginDto loginDto) {
-		return ResponseEntity.ok(authenticationService.login(loginDto));
-	}
+    @PostMapping("auth/register")
+    @Tag(name = "auth", description = "认证")
+    @Operation(summary = "注册")
+    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
+        return ResponseEntity.ok(authenticationService.register(registerDto));
+    }
 
-	@PostMapping("edit")
-	@Tag(name = "user", description = "用户")
-	@Operation(summary = "修改信息")
-	public ResponseEntity<UserViewModel> editUser(@RequestBody EditUserDto editUserDto) {
-		return ResponseEntity.ok(userMapper.userToUserViewModel(userAppService.editUser(editUserDto)));
-	}
+    @PostMapping("auth/login")
+    @Tag(name = "auth")
+    @Operation(summary = "登录")
+    public ResponseEntity<AuthViewModel> login(@RequestBody LoginDto loginDto) {
+        return ResponseEntity.ok(authenticationService.login(loginDto));
+    }
 
-	@PostMapping("changePassword")
-	@Tag(name = "user")
-	@Operation(summary = "修改密码")
-	public ResponseEntity<String> updatePassword(@RequestBody ChangePwdDto changePwd) {
-		return ResponseEntity.ok(userAppService.changePassword(changePwd));
-	}
+    @PostMapping("edit")
+    @Tag(name = "user", description = "用户")
+    @Operation(summary = "修改信息")
+    public ResponseEntity<UserViewModel> editUser(@RequestBody EditUserDto editUserDto) {
+        return ResponseEntity.ok(userMapper.userToUserViewModel(userAppService.editUser(editUserDto)));
+    }
 
-	@GetMapping("getUserDetail")
-	@Tag(name = "user")
-	@Operation(summary = "用户详情")
-	public ResponseEntity<UserDetailViewModel> getUserDetail() {
-		return ResponseEntity.ok(userMapper.userToUserDetailViewModel(userAppService.getUserDetail()));
-	}
+    @PostMapping("changePassword")
+    @Tag(name = "user")
+    @Operation(summary = "修改密码")
+    public ResponseEntity<String> updatePassword(@RequestBody ChangePwdDto changePwd) {
+        return ResponseEntity.ok(userAppService.changePassword(changePwd));
+    }
 
-	@PostMapping("admin/getUpgradeKey")
-	@Tag(name = "admin", description = "管理员")
-	@Operation(summary = "获取升级管理的密钥")
-	@PreAuthorize("hasAuthority('admin')")
-	public ResponseEntity<ChangeKey> changeUserRole(@RequestBody ChangeBody changeBody) {
-		return ResponseEntity.ok(toChangeKey(userAppService.getChangeKey(changeBody.email)));
-	}
+    @GetMapping("getUserDetail")
+    @Tag(name = "user")
+    @Operation(summary = "用户详情")
+    public ResponseEntity<UserDetailViewModel> getUserDetail() {
+        return ResponseEntity.ok(userMapper.userToUserDetailViewModel(userAppService.getUserDetail()));
+    }
 
-	@PutMapping("upgradeRole{key}")
-	@Tag(name = "user")
-	@Operation(summary = "升级角色")
-	public ResponseEntity<String> upgradeRole(@PathVariable @Schema(description = "升级密钥") String key) {
-		return ResponseEntity.ok(userAppService.upgradeRole(key));
-	}
+    @PostMapping("admin/getUpgradeKey")
+    @Tag(name = "admin", description = "管理员")
+    @Operation(summary = "获取升级管理的密钥")
+    @PreAuthorize("hasAuthority('admin')")
+    public ResponseEntity<ChangeKey> changeUserRole(@RequestBody ChangeBody changeBody) {
+        return ResponseEntity.ok(toChangeKey(userAppService.getChangeKey(changeBody.email)));
+    }
 
-	private ChangeKey toChangeKey(String key) {
-		return new ChangeKey(key, new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24));
-	}
+    @PutMapping("upgradeRole{key}")
+    @Tag(name = "user")
+    @Operation(summary = "升级角色")
+    public ResponseEntity<String> upgradeRole(@PathVariable @Schema(description = "升级密钥") String key) {
+        return ResponseEntity.ok(userAppService.upgradeRole(key));
+    }
 
-	record ChangeKey(String key, Date expiration) {
-	}
+    private ChangeKey toChangeKey(String key) {
+        return new ChangeKey(key, new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24));
+    }
 
-	record ChangeBody(String email) {
-	}
+    record ChangeKey(String key, Date expiration) {
+    }
+
+    record ChangeBody(String email) {
+    }
 }
 
